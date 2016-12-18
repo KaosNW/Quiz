@@ -6,15 +6,29 @@ var questions = [{question: "Who is Prime Minister of the UK?", choices: ["David
                 {question: "This time next year, we'll be ... ", choices: ["Millionaires", "Sweet home Alabama", "America's Most Wanted", "In space"], correctAnswers: 0}];
 
 var answers = [];
-var page = -1;
+var page = 0;
+var score = 0;
 
 function nextQuestion() {
-  var currentQ = Document.getElementById("question");
+  var currentQ = document.getElementById("question");
   var nextQ = questions[page];
-  currentQ.value = nextQ.question;
-  document.getElementById("answers").value = nextQ.choices;
-}
+  currentQ.innerHTML = "<p>" + questions[page].question + "</p>";
+    
+  var currentAns = document.getElementById("answers");
+  currentAns.innerHTML = "";
+  var nextAns = nextQ.choices;
+  
+    for (ans in nextAns) {
+        currentAns.innerHTML += '<input type="radio" name="answers">' + nextAns[ans] + "</input><br/>";
+    }
+    submitt();
+    page++;
+  }
 
-function check(){
-    //if(document.getElementById.valueOf)
-};
+function submitt(){
+  var response = document.getElementsByName("answers");
+//console.log(response);
+    if(response === questions[page].correctAnswers) {
+      score++;
+    }
+}
