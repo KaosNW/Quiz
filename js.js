@@ -8,36 +8,85 @@ var answers = [];
 var page = 0;
 var score = 0;
 
-//Function to deal with nextQuestion and answer radio buttons
-function nextQuestion() {
-  var currentQ = document.getElementById("question");
-  var nextQ = questions[page];
-  currentQ.innerHTML = "<p>" + questions[page].question + "</p>";
-//code for answer radio button list
-  var currentAns = document.getElementById("answers");
-  currentAns.innerHTML = "";
-  var nextAns = nextQ.choices;
-  //loop that goes through each of the choices in question array and creates a radio button for it in the answers HTML div.
-    for (ans in nextAns) {
-        currentAns.innerHTML += '<input type="radio" name="answers">' + nextAns[ans] + "</input><br/>";
-    }
-    //call to submitt function which tests if answer given is right
-    submitt();
-    //increment the question counter to know what Q/Ans to display next
-    page++;
+//Function to start quiz by populating first Q and answer list
+function initQuiz() {
+    page=0;
+    score=0;
+  if(page === 0){
+      document.getElementById('next').style.display = "block";
+      document.getElementById('start').style.display = "none";
+      nextQuestion();
+     }
   }
 
-function submitt(){
-  var myForm = document.form1;
-  var answer = myForm.answers;
-  var correctAnswer = questions[page].correctAnswers;
-    for(var i=0;i<answer.length;i++){
-        if(answer[i].checked){
-          if(answer[i] === correctAnswer){
-              score++;
-          }
-        }
+//Function to deal with nextQuestion and answer radio buttons
+function nextQuestion(){
+    if(page < questions.length){
+      var currentQ = document.getElementById("question");
+      var nextQ = questions[page];
+      currentQ.innerHTML = "<p>" + questions[page].question + "</p>";
+      //code for answer radio button list
+      var currentAns = document.getElementById("answers");
+      currentAns.innerHTML = "";
+      var nextAns = nextQ.choices;
+      //loop that goes through each of the choices in question array and creates a radio button for it in the answers HTML div.
+      for (ans in nextAns) {
+        currentAns.innerHTML += '<input type="radio" name="answers">' + nextAns[ans] + "</input><br/>";
+      }
+    //increment the question counter to know what Q/Ans to display next
+    page++;
+    }
+  else{
+      var endText = "<p> Congratulations! your score is: </p>";
+      document.getElementById('answers').innerHTML = score + " out of " + questions.length ;
+      document.getElementById('question').innerHTML = endText;
+      document.getElementById('next').style.display = "none";
+      document.getElementById('start').style.display = "block";
     }
 }
-    
+
+function submitt(){
+  var hasAnswered = 0;
+  for(var j = 0; j<document.form1.answers.length; j++){
+      if(document.form1.answers[j].checked){
+          hasAnswered = 1;
+      }
+    }
+    //if user selected an answer it is checked and score is incremented as needed. NextQuestion/Answer is then called
+  if(hasAnswered ===1){
+      //previousAns which can be used to go back
+    var previousAns = document.form1;
+    var myForm = document.form1;
+    var answer = myForm.answers;
+      for(var i=0;i<answer.length;i++){
+          //the below is page-1 as the questions index is 0 based but questions start from page 1.
+          var correctAnswer = questions[page-1].correctAnswers;
+          //this returns T or F as expected
+          if(answer[i].checked){
+            //this code compares the checked radiobox index with the correct ans index.
+            if(i === correctAnswer){
+                score++;
+                break;
+            }
+          }
+      }
+    //if question has been 'marked' the next question is setup by the below call.
+    nextQuestion();
+  }
+  //if no answer was selected.
+  else{
+      alert("Please select an answer!");
+  }
+}
+
+function back(){
+  if(page>=0){
+    page--;
+    nextQuestion();
+   }
+  else{
+    alert("You are at the first Question!");
+  }
+}
+
     

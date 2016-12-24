@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Quiz App</title>  
+    <title>Quiz App</title> 
+      <link href="css.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div>
@@ -18,10 +19,14 @@
       </p>
     </div>
     <div id="controls">
+      
       <form>
-        <input type="button" id="next" title="next" value="next" onclick="nextQuestion();"/>
+          <a href="#" onclick="back()">Back</a>
+        <input type="button" id="start" title="start" value="start" onClick="initQuiz()"/>
+        <input type="button" id="next" title="next" value="next" onclick="submitt()"/>
       </form>    
     </div>
   </body>
   <script src="js.js"></script>
+  
 </html>
