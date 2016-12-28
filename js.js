@@ -4,11 +4,36 @@ var questions = [{question: "Who is Prime Minister of the UK?", choices: ["David
                 {question: "How much wood could a woood chuck chuck", choices: ["if a wood chuck could chuck wood", "Hello", "Wong", "not me"], correctAnswers: 0},
                 {question: "This time next year, we'll be ... ", choices: ["Millionaires", "Sweet home Alabama", "America's Most Wanted", "In space"], correctAnswers: 0}];
 
+//code to convert questions array to JSON and store it locally
+var myJson = JSON.stringify(questions);
+localStorage.setItem("myJson", myJson);
+
 var answers = [];
 var page = 0;
 var score = 0;
 //used to capture the current page before submitt() is called so it can be used for back()
 var previousAns;
+
+//jQuery that is used to prompt login
+$(document).ready(function(){
+    //checks to see if local storage holds a key for UN
+    if(localStorage.userName){
+        var UN = prompt('UserName', 'UserName');
+        //if so it checks if the user input matches the held value (ben)
+        if(UN === localStorage.userName){
+            alert("Welcome back " + localStorage.userName);
+            //init the quiz if UN is known
+            initQuiz();
+        }
+        else{
+            alert("unkown UN");
+        }
+    }
+    //if no localstorage UN is found a prompt to create one is showb and stored
+    else{
+        localStorage.userName = prompt('createUN', 'createUN');
+    }
+})
 
 //Function to start quiz by populating first Q and answer list
 function initQuiz() {
@@ -35,6 +60,9 @@ function nextQuestion(callBackAnsSetter){
       for (ans in nextAns) {
         currentAns.innerHTML += '<input type="radio" name="answers">' + nextAns[ans] + "</input><br/>"; // populates the blank answer form with answers, appending each one on a new line as a new element
       }
+      //JQuery to fade in new question/Answer
+      $('#QuestionBlock').fadeIn(500);
+      $('#answerBlock').fadeIn(500);
     //increment the question counter to know what Q/Ans to display next
     page++;
     //validation check to see if a Callback function was provided (via back button) - if so it is invoked
@@ -58,6 +86,9 @@ function submitt(){
           hasAnswered = 1;
           //updates global var with the current answer (via form document)
           previousAns = j;
+         //JQuery to fade out question
+         $('#QuestionBlock').fadeOut(1);
+         $('#answerBlock').fadeOut(1);
           break;
       }
     }
@@ -103,7 +134,7 @@ function back(){
   }
 }
 
-$(document).ready(function(){
+/*$(document).ready(function(){
     $('#next').click(function(){
        $('#QuestionBlock').fadeOut(500);
        $('#answerBlock').fadeOut(500);
@@ -111,4 +142,4 @@ $(document).ready(function(){
        $('#answerBlock').fadeIn(500);
     })
 })
-    
+*/
